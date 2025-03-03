@@ -1,0 +1,924 @@
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| SEM_4              |
+| SQL_EXERCISES      |
+| sys                |
++--------------------+
+6 rows in set (0.01 sec)
+
+mysql> CREATE DATABASE HR;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> USE HR;
+Database changed
+mysql> CREATE TABLE REGIONS (
+    ->     REGION_ID INT,
+    ->     REGION_NAME VARCHAR(25),
+    ->     PRIMARY KEY (REGION_ID)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE TABLE COUNTRIES (
+    ->     COUNTRY_ID CHAR(2),
+    ->     COUNTRY_NAME VARCHAR(40),
+    ->     REGION_ID INT,
+    ->     PRIMARY KEY (COUNTRY_ID)
+    -> );
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CREATE TABLE LOCATIONS (
+    ->     LOCATION_ID INT AUTO_INCREMENT,
+    ->     STREET_ADDRESS VARCHAR(40),
+    ->     POSTAL_CODE VARCHAR(12),
+    ->     CITY VARCHAR(30),
+    ->     STATE_PROVINCE VARCHAR(25),
+    ->     COUNTRY_ID CHAR(2),
+    ->     PRIMARY KEY (LOCATION_ID)
+    -> );
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CREATE TABLE DEPARTMENTS (
+    ->     DEPARTMENT_ID INT,
+    ->     DEPARTMENT_NAME VARCHAR(30),
+    ->     DEPT_HEAD_EMPLOYEE_ID INT,   
+    ->     LOCATION_ID INT,
+    ->     PRIMARY KEY (DEPARTMENT_ID)
+    -> );
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CREATE TABLE JOBS (
+    ->     JOB_ID VARCHAR(10),
+    ->     JOB_TITLE VARCHAR(35),
+    ->     MIN_SALARY FLOAT, 
+    ->     MAX_SALARY FLOAT, 
+    ->     PRIMARY KEY (JOB_ID)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE TABLE EMPLOYEES (
+    ->     EMPLOYEE_ID INT,
+    ->     FIRST_NAME VARCHAR(20),
+    ->     LAST_NAME VARCHAR(25),
+    ->     EMAIL VARCHAR(25),
+    ->     PHONE_NUMBER VARCHAR(20),
+    ->     HIRE_DATE DATE,
+    ->     JOB_ID VARCHAR(10),
+    ->     SALARY FLOAT, 
+    ->     COMMISSION_PCT FLOAT, 
+    ->     MANAGER_ID INT,
+    ->     DEPARTMENT_ID INT,
+    ->     PRIMARY KEY (EMPLOYEE_ID)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE TABLE JOB_HISTORY (
+    ->     EMPLOYEE_ID INT,
+    ->     START_DATE DATE,
+    ->     END_DATE DATE,
+    ->     JOB_ID VARCHAR(10),
+    ->     PRIMARY KEY (EMPLOYEE_ID, START_DATE)
+    -> );
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> INSERT INTO REGIONS  
+    -> VALUES (1, 'EUROPE'),  
+    ->        (2, 'AMERICAS'),  
+    ->        (3, 'ASIA'),  
+    ->        (4, 'MIDDLE EAST AND AFRICA');  
+Query OK, 4 rows affected (0.00 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+ 
+mysql> INSERT INTO COUNTRIES  
+    -> VALUES ('IT', 'ITALY', 1),  
+    ->        ('JP', 'JAPAN', 3),  
+    ->        ('US', 'UNITED STATES OF AMERICA', 2),  
+    ->        ('CA', 'CANADA', 2),  
+    ->        ('CN', 'CHINA', 3),  
+    ->        ('IN', 'INDIA', 3),  
+    ->        ('AU', 'AUSTRALIA', 3),  
+    ->        ('ZW', 'ZIMBABWE', 4),  
+    ->        ('SG', 'SINGAPORE', 3),  
+    ->        ('UK', 'UNITED KINGDOM', 1),  
+    ->        ('FR', 'FRANCE', 1),  
+    ->        ('DE', 'GERMANY', 1),  
+    ->        ('ZM', 'ZAMBIA', 4),  
+    ->        ('EG', 'EGYPT', 4),  
+    ->        ('BR', 'BRAZIL', 2),  
+    ->        ('CH', 'SWITZERLAND', 1),  
+    ->        ('NL', 'NETHERLANDS', 1),  
+    ->        ('MX', 'MEXICO', 2),  
+    ->        ('KW', 'KUWAIT', 4),  
+    ->        ('IL', 'ISRAEL', 4),  
+    ->        ('DK', 'DENMARK', 1),  
+    ->        ('HK', 'HONGKONG', 3),  
+    ->        ('NG', 'NIGERIA', 4),  
+    ->        ('AR', 'ARGENTINA', 2),  
+    ->        ('BE', 'BELGIUM', 1);  
+Query OK, 25 rows affected (0.00 sec)
+Records: 25  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO LOCATIONS  
+    -> VALUES (1000, '1297 VIA COLA DI RIE', '00989', 'ROMA', NULL, 'IT'),  
+    ->        (1100, '93091 CALLE DELLA TESTA', '10934', 'VENICE', NULL, 'IT'),  
+    ->        (1200, '2017 SHINJUKU-KU', '1689', 'TOKYO', 'TOKYO PREFECTURE', 'JP'),  
+    ->        (1300, '9450 KAMIYA-CHO', '6823', 'HIROSHIMA', NULL, 'JP'),  
+    ->        (1400, '2014 JABBERWOCKY RD', '26192', 'SOUTHLAKE', 'TEXAS', 'US'),  
+    ->        (1500, '2011 INTERIORS BLVD', '99236', 'SOUTH SAN FRANCISCO', 'CALIFORNIA', 'US'),  
+    ->        (1600, '2007 ZAGORA ST', '50090', 'SOUTH BRUNSWICK', 'NEW JERSEY', 'US'),  
+    ->        (1700, '2004 CHARADE RD', '98199', 'SEATTLE', 'WASHINGTON', 'US'),  
+    ->        (1800, '147 SPADINA AVE', 'M5V 2L7', 'TORONTO', 'ONTARIO', 'CA'),  
+    ->        (1900, '6092 BOXWOOD ST', 'YSW 9T2', 'WHITEHORSE', 'YUKON', 'CA'),  
+    ->        (2000, '40-5-12 LAOGIANGGEN', '190518', 'BEIJING', NULL, 'CN'),  
+    ->        (2100, '1298 VILEPARLE (E)', '490231', 'BOMBAY', 'MAHARASHTRA', 'IN'),  
+    ->        (2200, '12-98 VICTORIA STREET', '2901', 'SYDNEY', 'NEW SOUTH WALES', 'AU'),  
+    ->        (2300, '198 CLEMENTI NORTH', '540198', 'SINGAPORE', NULL, 'SG'),  
+    ->        (2400, '8204 ARTHUR ST', NULL, 'LONDON', NULL, 'UK'),  
+    ->        (2500, 'MAGDALEN CENTRE, THE OXFORD SCIENCE PARK', 'OX9 9ZB', 'OXFORD', 'OXFORD', 'UK'),  
+    ->        (2600, '9702 CHESTER ROAD', '09629850293', 'STRETFORD', 'MANCHESTER', 'UK'),  
+    ->        (2700, 'SCHWANTHALERSTR. 7031', '80925', 'MUNICH', 'BAVARIA', 'DE'),  
+    ->        (2800, 'RUA FREI CANECA 1360', '01307-002', 'SAO PAULO', 'SAO PAULO', 'BR'),  
+    ->        (2900, '20 RUE DES CORPS-SAINTS', '1730', 'GENEVA', 'GENEVE', 'CH'),  
+    ->        (3000, 'MURTENSTRASSE 921', '3095', 'BERN', 'BE', 'CH'),  
+    ->        (3100, 'PIETER BREUGHELSTRAAT 837', '3029SK', 'UTRECHT', 'UTRECHT', 'NL'),  
+    ->        (3200, 'MARIANO ESCOBEDO 9991', '11932', 'MEXICO CITY', 'DISTRITO FEDERAL', 'MX');  
+Query OK, 23 rows affected (0.01 sec)
+Records: 23  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO DEPARTMENTS  
+    -> VALUES (10, 'ADMINISTRATION', 200, 1700),  
+    ->        (20, 'MARKETING', 201, 1800),  
+    ->        (30, 'PURCHASING', 114, 1700),  
+    ->        (40, 'HUMAN RESOURCES', 203, 2400),  
+    ->        (50, 'SHIPPING', 121, 1500),  
+    ->        (60, 'IT', 103, 1400),  
+    ->        (70, 'PUBLIC RELATIONS', 204, 2700),  
+    ->        (80, 'SALES', 145, 2500),  
+    ->        (90, 'EXECUTIVE', 100, 1700),  
+    ->        (100, 'FINANCE', 108, 1700),  
+    ->        (110, 'ACCOUNTING', 205, 1700),  
+    ->        (120, 'TREASURY', NULL, 1700),  
+    ->        (130, 'CORPORATE TAX', NULL, 1700),  
+    ->        (140, 'CONTROL AND CREDIT', NULL, 1700),  
+    ->        (150, 'SHAREHOLDER SERVICES', NULL, 1700),  
+    ->        (160, 'BENEFITS', NULL, 1700),  
+    ->        (170, 'MANUFACTURING', NULL, 1700),  
+    ->        (180, 'CONSTRUCTION', NULL, 1700),  
+    ->        (190, 'CONTRACTING', NULL, 1700),  
+    ->        (200, 'OPERATIONS', NULL, 1700),  
+    ->        (210, 'IT SUPPORT', NULL, 1700),  
+    ->        (220, 'NOC', NULL, 1700),  
+    ->        (230, 'IT HELPDESK', NULL, 1700),  
+    ->        (240, 'GOVERNMENT SALES', NULL, 1700),  
+    ->        (250, 'RETAIL SALES', NULL, 1700),  
+    ->        (260, 'RECRUITING', NULL, 1700),  
+    ->        (270, 'PAYROLL', NULL, 1700);
+Query OK, 27 rows affected (0.01 sec)
+Records: 27  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO JOBS  
+    -> VALUES ('AD_PRES', 'PRESIDENT', 20000, 40000),  
+    ->        ('AD_VP', 'ADMINISTRATION VICE PRESIDENT', 15000, 30000),  
+    ->        ('AD_ASST', 'ADMINISTRATION ASSISTANT', 3000, 6000),  
+    ->        ('FI_MGR', 'FINANCE MANAGER', 8200, 16000),  
+    ->        ('FI_ACCOUNT', 'ACCOUNTANT', 4200, 9000),  
+    ->        ('AC_MGR', 'ACCOUNTING MANAGER', 8200, 16000),  
+    ->        ('AC_ACCOUNT', 'PUBLIC ACCOUNTANT', 4200, 9000),  
+    ->        ('SA_MAN', 'SALES MANAGER', 10000, 20000),  
+    ->        ('SA_REP', 'SALES REPRESENTATIVE', 6000, 12000),  
+    ->        ('PU_MAN', 'PURCHASING MANAGER', 8000, 15000),  
+    ->        ('PU_CLERK', 'PURCHASING CLERK', 2500, 5500),  
+    ->        ('ST_MAN', 'STOCK MANAGER', 5500, 8500),  
+    ->        ('ST_CLERK', 'STOCK CLERK', 2000, 5000),  
+    ->        ('SH_CLERK', 'SHIPPING CLERK', 2500, 5500),  
+    ->        ('IT_PROG', 'PROGRAMMER', 4000, 10000),  
+    ->        ('MK_MAN', 'MARKETING MANAGER', 9000, 15000),  
+    ->        ('MK_REP', 'MARKETING REPRESENTATIVE', 4000, 9000),  
+    ->        ('HR_REP', 'HUMAN RESOURCES REPRESENTATIVE', 4000, 9000),  
+    ->        ('PR_REP', 'PUBLIC RELATIONS REPRESENTATIVE', 4500, 10500);  
+Query OK, 19 rows affected (0.00 sec)
+Records: 19  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO EMPLOYEES (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID) 
+    -> VALUES 
+    -> (100, 'STEVEN', 'KING', 'SKING', '515.123.4567', STR_TO_DATE('17-JUN-1987', '%d-%M-%Y'), 'AD_PRES', 24000, NULL, NULL, 90),
+    -> (101, 'NEENA', 'KOCHHAR', 'NKOCHHAR', '515.123.4568', STR_TO_DATE('21-SEP-1989', '%d-%M-%Y'), 'AD_VP', 17000, NULL, 100, 90),
+    -> (102, 'LEX', 'DE HAAN', 'LDEHAAN', '515.123.4569', STR_TO_DATE('13-JAN-1993', '%d-%M-%Y'), 'AD_VP', 17000, NULL, 100, 90),
+    -> (103, 'ALEXANDER', 'HUNOLD', 'AHUNOLD', '590.423.4567', STR_TO_DATE('03-JAN-1990', '%d-%M-%Y'), 'IT_PROG', 9000, NULL, 102, 60),
+    -> (104, 'BRUCE', 'ERNST', 'BERNST', '590.423.4568', STR_TO_DATE('21-MAY-1991', '%d-%M-%Y'), 'IT_PROG', 6000, NULL, 103, 60),
+    -> (105, 'DAVID', 'AUSTIN', 'DAUSTIN', '590.423.4569', STR_TO_DATE('25-JUN-1997', '%d-%M-%Y'), 'IT_PROG', 4800, NULL, 103, 60),
+    -> (106, 'VALLI', 'PATABALLA', 'VPATABAL', '590.423.4560', STR_TO_DATE('05-FEB-1998', '%d-%M-%Y'), 'IT_PROG', 4800, NULL, 103, 60),
+    -> (107, 'DIANA', 'LORENTZ', 'DLORENTZ', '590.423.5567', STR_TO_DATE('07-FEB-1999', '%d-%M-%Y'), 'IT_PROG', 4200, NULL, 103, 60),
+    -> (108, 'NANCY', 'GREENBERG', 'NGREENBE', '515.124.4569', STR_TO_DATE('17-AUG-1994', '%d-%M-%Y'), 'FI_MGR', 12000, NULL, 101, 100),
+    -> (109, 'DANIEL', 'FAVIET', 'DFAVIET', '515.124.4169', STR_TO_DATE('16-AUG-1994', '%d-%M-%Y'), 'FI_ACCOUNT', 9000, NULL, 108, 100),
+    -> (110, 'JOHN', 'CHEN', 'JCHEN', '515.124.4269', STR_TO_DATE('28-SEP-1997', '%d-%M-%Y'), 'FI_ACCOUNT', 8200, NULL, 108, 100),
+    -> (111, 'ISMAEL', 'SCIARRA', 'ISCIARRA', '515.124.4369', STR_TO_DATE('30-SEP-1997', '%d-%M-%Y'), 'FI_ACCOUNT', 7700, NULL, 108, 100),
+    -> (112, 'JOSE MANUEL', 'URMAN', 'JMURMAN', '515.124.4469', STR_TO_DATE('07-MAR-1998', '%d-%M-%Y'), 'FI_ACCOUNT', 7800, NULL, 108, 100),
+    -> (113, 'LUIS', 'POPP', 'LPOPP', '515.124.4567', STR_TO_DATE('07-DEC-1999', '%d-%M-%Y'), 'FI_ACCOUNT', 6900, NULL, 108, 100),
+    -> (114, 'DEN', 'RAPHAELY', 'DRAPHEAL', '515.127.4561', STR_TO_DATE('07-DEC-1994', '%d-%M-%Y'), 'PU_MAN', 11000, NULL, 100, 30),
+    -> (115, 'ALEXANDER', 'KHOO', 'AKHOO', '515.127.4562', STR_TO_DATE('18-MAY-1995', '%d-%M-%Y'), 'PU_CLERK', 3100, NULL, 114, 30),
+    -> (116, 'SHELLI', 'BAIDA', 'SBAIDA', '515.127.4563', STR_TO_DATE('24-DEC-1997', '%d-%M-%Y'), 'PU_CLERK', 2900, NULL, 114, 30),
+    -> (117, 'SIGAL', 'TOBIAS', 'STOBIAS', '515.127.4564', STR_TO_DATE('24-JUL-1997', '%d-%M-%Y'), 'PU_CLERK', 2800, NULL, 114, 30),
+    -> (118, 'GUY', 'HIMURO', 'GHIMURO', '515.127.4565', STR_TO_DATE('15-NOV-1998', '%d-%M-%Y'), 'PU_CLERK', 2600, NULL, 114, 30),
+    -> (119, 'KAREN', 'COLMENARES', 'KCOLMENA', '515.127.4566', STR_TO_DATE('10-AUG-1999', '%d-%M-%Y'), 'PU_CLERK', 2500, NULL, 114, 30),
+    -> (120, 'MATTHEW', 'WEISS', 'MWEISS', '650.123.1234', STR_TO_DATE('18-JUL-1996', '%d-%M-%Y'), 'ST_MAN', 8000, NULL, 100, 50),
+    -> (121, 'ADAM', 'FRIPP', 'AFRIPP', '650.123.2234', STR_TO_DATE('10-APR-1997', '%d-%M-%Y'), 'ST_MAN', 8200, NULL, 100, 50),
+    -> (122, 'PAYAM', 'KAUFLING', 'PKAUFLIN', '650.123.3234', STR_TO_DATE('01-MAY-1995', '%d-%M-%Y'), 'ST_MAN', 7900, NULL, 100, 50),
+    -> (123, 'SHANTA', 'VOLLMAN', 'SVOLLMAN', '650.123.4234', STR_TO_DATE('10-OCT-1997', '%d-%M-%Y'), 'ST_MAN', 6500, NULL, 100, 50),
+    -> (124, 'KEVIN', 'MOURGOS', 'KMOURGOS', '650.123.5234', STR_TO_DATE('16-NOV-1999', '%d-%M-%Y'), 'ST_MAN', 5800, NULL, 100, 50),
+    -> (125, 'JULIA', 'NAYER', 'JNAYER', '650.124.1214', STR_TO_DATE('16-JUL-1997', '%d-%M-%Y'), 'ST_CLERK', 3200, NULL, 120, 50),
+    -> (126, 'IRENE', 'MIKKILINENI', 'IMIKKILI', '650.124.1224', STR_TO_DATE('28-SEP-1998', '%d-%M-%Y'), 'ST_CLERK', 2700, NULL, 120, 50),
+    -> (127, 'JAMES', 'LANDRY', 'JLANDRY', '650.124.1334', STR_TO_DATE('14-JAN-1999', '%d-%M-%Y'), 'ST_CLERK', 2400, NULL, 120, 50),
+    -> (128, 'STEVEN', 'MARKLE', 'SMARKLE', '650.124.1434', STR_TO_DATE('08-MAR-2000', '%d-%M-%Y'), 'ST_CLERK', 2200, NULL, 120, 50);
+Query OK, 29 rows affected (0.00 sec)
+Records: 29  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO JOB_HISTORY 
+    -> VALUES 
+    ->     (102, STR_TO_DATE('13-JAN-1993', '%d-%M-%Y'), STR_TO_DATE('24-JUL-1998', '%d-%M-%Y'), 'IT_PROG'),
+    ->     (101, STR_TO_DATE('21-SEP-1989', '%d-%M-%Y'), STR_TO_DATE('27-OCT-1993', '%d-%M-%Y'), 'AC_ACCOUNT'),
+    ->     (101, STR_TO_DATE('28-OCT-1993', '%d-%M-%Y'), STR_TO_DATE('15-MAR-1997', '%d-%M-%Y'), 'AC_MGR'),
+    ->     (201, STR_TO_DATE('27-FEB-1996', '%d-%M-%Y'), STR_TO_DATE('19-DEC-1999', '%d-%M-%Y'), 'MK_REP'),
+    ->     (114, STR_TO_DATE('24-MAR-1998', '%d-%M-%Y'), STR_TO_DATE('31-DEC-1999', '%d-%M-%Y'), 'ST_CLERK'),
+    ->     (122, STR_TO_DATE('01-JAN-1999', '%d-%M-%Y'), STR_TO_DATE('31-DEC-1999', '%d-%M-%Y'), 'ST_CLERK'),
+    ->     (200, STR_TO_DATE('17-SEP-1987', '%d-%M-%Y'), STR_TO_DATE('17-JUN-1993', '%d-%M-%Y'), 'AD_ASST'),
+    ->     (176, STR_TO_DATE('24-MAR-1998', '%d-%M-%Y'), STR_TO_DATE('31-DEC-1998', '%d-%M-%Y'), 'SA_REP'),
+    ->     (176, STR_TO_DATE('01-JAN-1999', '%d-%M-%Y'), STR_TO_DATE('31-DEC-1999', '%d-%M-%Y'), 'SA_MAN'),
+    ->     (200, STR_TO_DATE('01-JUL-1994', '%d-%M-%Y'), STR_TO_DATE('31-DEC-1998', '%d-%M-%Y'), 'AC_ACCOUNT');
+Query OK, 10 rows affected (0.00 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE COUNTRIES 
+    -> ADD FOREIGN KEY (REGION_ID) REFERENCES REGIONS(REGION_ID);
+Query OK, 25 rows affected (0.02 sec)
+Records: 25  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> ALTER TABLE LOCATIONS 
+    -> ADD FOREIGN KEY (COUNTRY_ID) REFERENCES COUNTRIES(COUNTRY_ID);
+Query OK, 23 rows affected (0.01 sec)
+Records: 23  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> ALTER TABLE DEPARTMENTS 
+    -> ADD FOREIGN KEY (LOCATION_ID) REFERENCES LOCATIONS(LOCATION_ID);
+Query OK, 27 rows affected (0.01 sec)
+Records: 27  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> ALTER TABLE EMPLOYEES 
+    -> ADD FOREIGN KEY (JOB_ID) REFERENCES JOBS(JOB_ID),
+    -> ADD FOREIGN KEY (DEPARTMENT_ID) REFERENCES DEPARTMENTS(DEPARTMENT_ID),
+    -> ADD FOREIGN KEY (MANAGER_ID) REFERENCES EMPLOYEES(EMPLOYEE_ID);
+Query OK, 29 rows affected (0.01 sec)
+Records: 29  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM REGIONS;
++-----------+------------------------+
+| REGION_ID | REGION_NAME            |
++-----------+------------------------+
+|         1 | EUROPE                 |
+|         2 | AMERICAS               |
+|         3 | ASIA                   |
+|         4 | MIDDLE EAST AND AFRICA |
++-----------+------------------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM COUNTRIES;
++------------+--------------------------+-----------+
+| COUNTRY_ID | COUNTRY_NAME             | REGION_ID |
++------------+--------------------------+-----------+
+| AR         | ARGENTINA                |         2 |
+| AU         | AUSTRALIA                |         3 |
+| BE         | BELGIUM                  |         1 |
+| BR         | BRAZIL                   |         2 |
+| CA         | CANADA                   |         2 |
+| CH         | SWITZERLAND              |         1 |
+| CN         | CHINA                    |         3 |
+| DE         | GERMANY                  |         1 |
+| DK         | DENMARK                  |         1 |
+| EG         | EGYPT                    |         4 |
+| FR         | FRANCE                   |         1 |
+| HK         | HONGKONG                 |         3 |
+| IL         | ISRAEL                   |         4 |
+| IN         | INDIA                    |         3 |
+| IT         | ITALY                    |         1 |
+| JP         | JAPAN                    |         3 |
+| KW         | KUWAIT                   |         4 |
+| MX         | MEXICO                   |         2 |
+| NG         | NIGERIA                  |         4 |
+| NL         | NETHERLANDS              |         1 |
+| SG         | SINGAPORE                |         3 |
+| UK         | UNITED KINGDOM           |         1 |
+| US         | UNITED STATES OF AMERICA |         2 |
+| ZM         | ZAMBIA                   |         4 |
+| ZW         | ZIMBABWE                 |         4 |
++------------+--------------------------+-----------+
+25 rows in set (0.00 sec)
+
+mysql> SELECT * FROM LOCATIONS;
++-------------+------------------------------------------+-------------+---------------------+------------------+------------+
+| LOCATION_ID | STREET_ADDRESS                           | POSTAL_CODE | CITY                | STATE_PROVINCE   | COUNTRY_ID |
++-------------+------------------------------------------+-------------+---------------------+------------------+------------+
+|        1000 | 1297 VIA COLA DI RIE                     | 00989       | ROMA                | NULL             | IT         |
+|        1100 | 93091 CALLE DELLA TESTA                  | 10934       | VENICE              | NULL             | IT         |
+|        1200 | 2017 SHINJUKU-KU                         | 1689        | TOKYO               | TOKYO PREFECTURE | JP         |
+|        1300 | 9450 KAMIYA-CHO                          | 6823        | HIROSHIMA           | NULL             | JP         |
+|        1400 | 2014 JABBERWOCKY RD                      | 26192       | SOUTHLAKE           | TEXAS            | US         |
+|        1500 | 2011 INTERIORS BLVD                      | 99236       | SOUTH SAN FRANCISCO | CALIFORNIA       | US         |
+|        1600 | 2007 ZAGORA ST                           | 50090       | SOUTH BRUNSWICK     | NEW JERSEY       | US         |
+|        1700 | 2004 CHARADE RD                          | 98199       | SEATTLE             | WASHINGTON       | US         |
+|        1800 | 147 SPADINA AVE                          | M5V 2L7     | TORONTO             | ONTARIO          | CA         |
+|        1900 | 6092 BOXWOOD ST                          | YSW 9T2     | WHITEHORSE          | YUKON            | CA         |
+|        2000 | 40-5-12 LAOGIANGGEN                      | 190518      | BEIJING             | NULL             | CN         |
+|        2100 | 1298 VILEPARLE (E)                       | 490231      | BOMBAY              | MAHARASHTRA      | IN         |
+|        2200 | 12-98 VICTORIA STREET                    | 2901        | SYDNEY              | NEW SOUTH WALES  | AU         |
+|        2300 | 198 CLEMENTI NORTH                       | 540198      | SINGAPORE           | NULL             | SG         |
+|        2400 | 8204 ARTHUR ST                           | NULL        | LONDON              | NULL             | UK         |
+|        2500 | MAGDALEN CENTRE, THE OXFORD SCIENCE PARK | OX9 9ZB     | OXFORD              | OXFORD           | UK         |
+|        2600 | 9702 CHESTER ROAD                        | 09629850293 | STRETFORD           | MANCHESTER       | UK         |
+|        2700 | SCHWANTHALERSTR. 7031                    | 80925       | MUNICH              | BAVARIA          | DE         |
+|        2800 | RUA FREI CANECA 1360                     | 01307-002   | SAO PAULO           | SAO PAULO        | BR         |
+|        2900 | 20 RUE DES CORPS-SAINTS                  | 1730        | GENEVA              | GENEVE           | CH         |
+|        3000 | MURTENSTRASSE 921                        | 3095        | BERN                | BE               | CH         |
+|        3100 | PIETER BREUGHELSTRAAT 837                | 3029SK      | UTRECHT             | UTRECHT          | NL         |
+|        3200 | MARIANO ESCOBEDO 9991                    | 11932       | MEXICO CITY         | DISTRITO FEDERAL | MX         |
++-------------+------------------------------------------+-------------+---------------------+------------------+------------+
+23 rows in set (0.00 sec)
+
+mysql> SELECT * FROM DEPARTMENTS;
++---------------+----------------------+-----------------------+-------------+
+| DEPARTMENT_ID | DEPARTMENT_NAME      | DEPT_HEAD_EMPLOYEE_ID | LOCATION_ID |
++---------------+----------------------+-----------------------+-------------+
+|            10 | ADMINISTRATION       |                   200 |        1700 |
+|            20 | MARKETING            |                   201 |        1800 |
+|            30 | PURCHASING           |                   114 |        1700 |
+|            40 | HUMAN RESOURCES      |                   203 |        2400 |
+|            50 | SHIPPING             |                   121 |        1500 |
+|            60 | IT                   |                   103 |        1400 |
+|            70 | PUBLIC RELATIONS     |                   204 |        2700 |
+|            80 | SALES                |                   145 |        2500 |
+|            90 | EXECUTIVE            |                   100 |        1700 |
+|           100 | FINANCE              |                   108 |        1700 |
+|           110 | ACCOUNTING           |                   205 |        1700 |
+|           120 | TREASURY             |                  NULL |        1700 |
+|           130 | CORPORATE TAX        |                  NULL |        1700 |
+|           140 | CONTROL AND CREDIT   |                  NULL |        1700 |
+|           150 | SHAREHOLDER SERVICES |                  NULL |        1700 |
+|           160 | BENEFITS             |                  NULL |        1700 |
+|           170 | MANUFACTURING        |                  NULL |        1700 |
+|           180 | CONSTRUCTION         |                  NULL |        1700 |
+|           190 | CONTRACTING          |                  NULL |        1700 |
+|           200 | OPERATIONS           |                  NULL |        1700 |
+|           210 | IT SUPPORT           |                  NULL |        1700 |
+|           220 | NOC                  |                  NULL |        1700 |
+|           230 | IT HELPDESK          |                  NULL |        1700 |
+|           240 | GOVERNMENT SALES     |                  NULL |        1700 |
+|           250 | RETAIL SALES         |                  NULL |        1700 |
+|           260 | RECRUITING           |                  NULL |        1700 |
+|           270 | PAYROLL              |                  NULL |        1700 |
++---------------+----------------------+-----------------------+-------------+
+27 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEES;
++-------------+-------------+-------------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME  | LAST_NAME   | EMAIL    | PHONE_NUMBER | HIRE_DATE  | JOB_ID     | SALARY | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+-------------+-------------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+|         100 | STEVEN      | KING        | SKING    | 515.123.4567 | 1987-06-17 | AD_PRES    |  24000 |           NULL |       NULL |            90 |
+|         101 | NEENA       | KOCHHAR     | NKOCHHAR | 515.123.4568 | 1989-09-21 | AD_VP      |  17000 |           NULL |        100 |            90 |
+|         102 | LEX         | DE HAAN     | LDEHAAN  | 515.123.4569 | 1993-01-13 | AD_VP      |  17000 |           NULL |        100 |            90 |
+|         103 | ALEXANDER   | HUNOLD      | AHUNOLD  | 590.423.4567 | 1990-01-03 | IT_PROG    |   9000 |           NULL |        102 |            60 |
+|         104 | BRUCE       | ERNST       | BERNST   | 590.423.4568 | 1991-05-21 | IT_PROG    |   6000 |           NULL |        103 |            60 |
+|         105 | DAVID       | AUSTIN      | DAUSTIN  | 590.423.4569 | 1997-06-25 | IT_PROG    |   4800 |           NULL |        103 |            60 |
+|         106 | VALLI       | PATABALLA   | VPATABAL | 590.423.4560 | 1998-02-05 | IT_PROG    |   4800 |           NULL |        103 |            60 |
+|         107 | DIANA       | LORENTZ     | DLORENTZ | 590.423.5567 | 1999-02-07 | IT_PROG    |   4200 |           NULL |        103 |            60 |
+|         108 | NANCY       | GREENBERG   | NGREENBE | 515.124.4569 | 1994-08-17 | FI_MGR     |  12000 |           NULL |        101 |           100 |
+|         109 | DANIEL      | FAVIET      | DFAVIET  | 515.124.4169 | 1994-08-16 | FI_ACCOUNT |   9000 |           NULL |        108 |           100 |
+|         110 | JOHN        | CHEN        | JCHEN    | 515.124.4269 | 1997-09-28 | FI_ACCOUNT |   8200 |           NULL |        108 |           100 |
+|         111 | ISMAEL      | SCIARRA     | ISCIARRA | 515.124.4369 | 1997-09-30 | FI_ACCOUNT |   7700 |           NULL |        108 |           100 |
+|         112 | JOSE MANUEL | URMAN       | JMURMAN  | 515.124.4469 | 1998-03-07 | FI_ACCOUNT |   7800 |           NULL |        108 |           100 |
+|         113 | LUIS        | POPP        | LPOPP    | 515.124.4567 | 1999-12-07 | FI_ACCOUNT |   6900 |           NULL |        108 |           100 |
+|         114 | DEN         | RAPHAELY    | DRAPHEAL | 515.127.4561 | 1994-12-07 | PU_MAN     |  11000 |           NULL |        100 |            30 |
+|         115 | ALEXANDER   | KHOO        | AKHOO    | 515.127.4562 | 1995-05-18 | PU_CLERK   |   3100 |           NULL |        114 |            30 |
+|         116 | SHELLI      | BAIDA       | SBAIDA   | 515.127.4563 | 1997-12-24 | PU_CLERK   |   2900 |           NULL |        114 |            30 |
+|         117 | SIGAL       | TOBIAS      | STOBIAS  | 515.127.4564 | 1997-07-24 | PU_CLERK   |   2800 |           NULL |        114 |            30 |
+|         118 | GUY         | HIMURO      | GHIMURO  | 515.127.4565 | 1998-11-15 | PU_CLERK   |   2600 |           NULL |        114 |            30 |
+|         119 | KAREN       | COLMENARES  | KCOLMENA | 515.127.4566 | 1999-08-10 | PU_CLERK   |   2500 |           NULL |        114 |            30 |
+|         120 | MATTHEW     | WEISS       | MWEISS   | 650.123.1234 | 1996-07-18 | ST_MAN     |   8000 |           NULL |        100 |            50 |
+|         121 | ADAM        | FRIPP       | AFRIPP   | 650.123.2234 | 1997-04-10 | ST_MAN     |   8200 |           NULL |        100 |            50 |
+|         122 | PAYAM       | KAUFLING    | PKAUFLIN | 650.123.3234 | 1995-05-01 | ST_MAN     |   7900 |           NULL |        100 |            50 |
+|         123 | SHANTA      | VOLLMAN     | SVOLLMAN | 650.123.4234 | 1997-10-10 | ST_MAN     |   6500 |           NULL |        100 |            50 |
+|         124 | KEVIN       | MOURGOS     | KMOURGOS | 650.123.5234 | 1999-11-16 | ST_MAN     |   5800 |           NULL |        100 |            50 |
+|         125 | JULIA       | NAYER       | JNAYER   | 650.124.1214 | 1997-07-16 | ST_CLERK   |   3200 |           NULL |        120 |            50 |
+|         126 | IRENE       | MIKKILINENI | IMIKKILI | 650.124.1224 | 1998-09-28 | ST_CLERK   |   2700 |           NULL |        120 |            50 |
+|         127 | JAMES       | LANDRY      | JLANDRY  | 650.124.1334 | 1999-01-14 | ST_CLERK   |   2400 |           NULL |        120 |            50 |
+|         128 | STEVEN      | MARKLE      | SMARKLE  | 650.124.1434 | 2000-03-08 | ST_CLERK   |   2200 |           NULL |        120 |            50 |
++-------------+-------------+-------------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+29 rows in set (0.01 sec)
+
+mysql> SELECT * FROM JOBS;
++------------+---------------------------------+------------+------------+
+| JOB_ID     | JOB_TITLE                       | MIN_SALARY | MAX_SALARY |
++------------+---------------------------------+------------+------------+
+| AC_ACCOUNT | PUBLIC ACCOUNTANT               |       4200 |       9000 |
+| AC_MGR     | ACCOUNTING MANAGER              |       8200 |      16000 |
+| AD_ASST    | ADMINISTRATION ASSISTANT        |       3000 |       6000 |
+| AD_PRES    | PRESIDENT                       |      20000 |      40000 |
+| AD_VP      | ADMINISTRATION VICE PRESIDENT   |      15000 |      30000 |
+| FI_ACCOUNT | ACCOUNTANT                      |       4200 |       9000 |
+| FI_MGR     | FINANCE MANAGER                 |       8200 |      16000 |
+| HR_REP     | HUMAN RESOURCES REPRESENTATIVE  |       4000 |       9000 |
+| IT_PROG    | PROGRAMMER                      |       4000 |      10000 |
+| MK_MAN     | MARKETING MANAGER               |       9000 |      15000 |
+| MK_REP     | MARKETING REPRESENTATIVE        |       4000 |       9000 |
+| PR_REP     | PUBLIC RELATIONS REPRESENTATIVE |       4500 |      10500 |
+| PU_CLERK   | PURCHASING CLERK                |       2500 |       5500 |
+| PU_MAN     | PURCHASING MANAGER              |       8000 |      15000 |
+| SA_MAN     | SALES MANAGER                   |      10000 |      20000 |
+| SA_REP     | SALES REPRESENTATIVE            |       6000 |      12000 |
+| SH_CLERK   | SHIPPING CLERK                  |       2500 |       5500 |
+| ST_CLERK   | STOCK CLERK                     |       2000 |       5000 |
+| ST_MAN     | STOCK MANAGER                   |       5500 |       8500 |
++------------+---------------------------------+------------+------------+
+19 rows in set (0.00 sec)
+
+mysql> SELECT * FROM JOB_HISTORY;
++-------------+------------+------------+------------+
+| EMPLOYEE_ID | START_DATE | END_DATE   | JOB_ID     |
++-------------+------------+------------+------------+
+|         101 | 1989-09-21 | 1993-10-27 | AC_ACCOUNT |
+|         101 | 1993-10-28 | 1997-03-15 | AC_MGR     |
+|         102 | 1993-01-13 | 1998-07-24 | IT_PROG    |
+|         114 | 1998-03-24 | 1999-12-31 | ST_CLERK   |
+|         122 | 1999-01-01 | 1999-12-31 | ST_CLERK   |
+|         176 | 1998-03-24 | 1998-12-31 | SA_REP     |
+|         176 | 1999-01-01 | 1999-12-31 | SA_MAN     |
+|         200 | 1987-09-17 | 1993-06-17 | AD_ASST    |
+|         200 | 1994-07-01 | 1998-12-31 | AC_ACCOUNT |
+|         201 | 1996-02-27 | 1999-12-19 | MK_REP     |
++-------------+------------+------------+------------+
+10 rows in set (0.00 sec)
+
+
+mysql> #QUERIES
+
+
+mysql> SELECT * FROM employees;
++-------------+-------------+-------------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME  | LAST_NAME   | EMAIL    | PHONE_NUMBER | HIRE_DATE  | JOB_ID     | SALARY | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+-------------+-------------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+|         100 | STEVEN      | KING        | SKING    | 515.123.4567 | 1987-06-17 | AD_PRES    |  24000 |           NULL |       NULL |            90 |
+|         101 | NEENA       | KOCHHAR     | NKOCHHAR | 515.123.4568 | 1989-09-21 | AD_VP      |  17000 |           NULL |        100 |            90 |
+|         102 | LEX         | DE HAAN     | LDEHAAN  | 515.123.4569 | 1993-01-13 | AD_VP      |  17000 |           NULL |        100 |            90 |
+|         103 | ALEXANDER   | HUNOLD      | AHUNOLD  | 590.423.4567 | 1990-01-03 | IT_PROG    |   9000 |           NULL |        102 |            60 |
+|         104 | BRUCE       | ERNST       | BERNST   | 590.423.4568 | 1991-05-21 | IT_PROG    |   6000 |           NULL |        103 |            60 |
+|         105 | DAVID       | AUSTIN      | DAUSTIN  | 590.423.4569 | 1997-06-25 | IT_PROG    |   4800 |           NULL |        103 |            60 |
+|         106 | VALLI       | PATABALLA   | VPATABAL | 590.423.4560 | 1998-02-05 | IT_PROG    |   4800 |           NULL |        103 |            60 |
+|         107 | DIANA       | LORENTZ     | DLORENTZ | 590.423.5567 | 1999-02-07 | IT_PROG    |   4200 |           NULL |        103 |            60 |
+|         108 | NANCY       | GREENBERG   | NGREENBE | 515.124.4569 | 1994-08-17 | FI_MGR     |  12000 |           NULL |        101 |           100 |
+|         109 | DANIEL      | FAVIET      | DFAVIET  | 515.124.4169 | 1994-08-16 | FI_ACCOUNT |   9000 |           NULL |        108 |           100 |
+|         110 | JOHN        | CHEN        | JCHEN    | 515.124.4269 | 1997-09-28 | FI_ACCOUNT |   8200 |           NULL |        108 |           100 |
+|         111 | ISMAEL      | SCIARRA     | ISCIARRA | 515.124.4369 | 1997-09-30 | FI_ACCOUNT |   7700 |           NULL |        108 |           100 |
+|         112 | JOSE MANUEL | URMAN       | JMURMAN  | 515.124.4469 | 1998-03-07 | FI_ACCOUNT |   7800 |           NULL |        108 |           100 |
+|         113 | LUIS        | POPP        | LPOPP    | 515.124.4567 | 1999-12-07 | FI_ACCOUNT |   6900 |           NULL |        108 |           100 |
+|         114 | DEN         | RAPHAELY    | DRAPHEAL | 515.127.4561 | 1994-12-07 | PU_MAN     |  11000 |           NULL |        100 |            30 |
+|         115 | ALEXANDER   | KHOO        | AKHOO    | 515.127.4562 | 1995-05-18 | PU_CLERK   |   3100 |           NULL |        114 |            30 |
+|         116 | SHELLI      | BAIDA       | SBAIDA   | 515.127.4563 | 1997-12-24 | PU_CLERK   |   2900 |           NULL |        114 |            30 |
+|         117 | SIGAL       | TOBIAS      | STOBIAS  | 515.127.4564 | 1997-07-24 | PU_CLERK   |   2800 |           NULL |        114 |            30 |
+|         118 | GUY         | HIMURO      | GHIMURO  | 515.127.4565 | 1998-11-15 | PU_CLERK   |   2600 |           NULL |        114 |            30 |
+|         119 | KAREN       | COLMENARES  | KCOLMENA | 515.127.4566 | 1999-08-10 | PU_CLERK   |   2500 |           NULL |        114 |            30 |
+|         120 | MATTHEW     | WEISS       | MWEISS   | 650.123.1234 | 1996-07-18 | ST_MAN     |   8000 |           NULL |        100 |            50 |
+|         121 | ADAM        | FRIPP       | AFRIPP   | 650.123.2234 | 1997-04-10 | ST_MAN     |   8200 |           NULL |        100 |            50 |
+|         122 | PAYAM       | KAUFLING    | PKAUFLIN | 650.123.3234 | 1995-05-01 | ST_MAN     |   7900 |           NULL |        100 |            50 |
+|         123 | SHANTA      | VOLLMAN     | SVOLLMAN | 650.123.4234 | 1997-10-10 | ST_MAN     |   6500 |           NULL |        100 |            50 |
+|         124 | KEVIN       | MOURGOS     | KMOURGOS | 650.123.5234 | 1999-11-16 | ST_MAN     |   5800 |           NULL |        100 |            50 |
+|         125 | JULIA       | NAYER       | JNAYER   | 650.124.1214 | 1997-07-16 | ST_CLERK   |   3200 |           NULL |        120 |            50 |
+|         126 | IRENE       | MIKKILINENI | IMIKKILI | 650.124.1224 | 1998-09-28 | ST_CLERK   |   2700 |           NULL |        120 |            50 |
+|         127 | JAMES       | LANDRY      | JLANDRY  | 650.124.1334 | 1999-01-14 | ST_CLERK   |   2400 |           NULL |        120 |            50 |
+|         128 | STEVEN      | MARKLE      | SMARKLE  | 650.124.1434 | 2000-03-08 | ST_CLERK   |   2200 |           NULL |        120 |            50 |
++-------------+-------------+-------------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+29 rows in set (0.00 sec)
+
+mysql> SELECT FIRST_NAME, LAST_NAME, EMAIL FROM EMPLOYEES;
++-------------+-------------+----------+
+| FIRST_NAME  | LAST_NAME   | EMAIL    |
++-------------+-------------+----------+
+| STEVEN      | KING        | SKING    |
+| NEENA       | KOCHHAR     | NKOCHHAR |
+| LEX         | DE HAAN     | LDEHAAN  |
+| ALEXANDER   | HUNOLD      | AHUNOLD  |
+| BRUCE       | ERNST       | BERNST   |
+| DAVID       | AUSTIN      | DAUSTIN  |
+| VALLI       | PATABALLA   | VPATABAL |
+| DIANA       | LORENTZ     | DLORENTZ |
+| NANCY       | GREENBERG   | NGREENBE |
+| DANIEL      | FAVIET      | DFAVIET  |
+| JOHN        | CHEN        | JCHEN    |
+| ISMAEL      | SCIARRA     | ISCIARRA |
+| JOSE MANUEL | URMAN       | JMURMAN  |
+| LUIS        | POPP        | LPOPP    |
+| DEN         | RAPHAELY    | DRAPHEAL |
+| ALEXANDER   | KHOO        | AKHOO    |
+| SHELLI      | BAIDA       | SBAIDA   |
+| SIGAL       | TOBIAS      | STOBIAS  |
+| GUY         | HIMURO      | GHIMURO  |
+| KAREN       | COLMENARES  | KCOLMENA |
+| MATTHEW     | WEISS       | MWEISS   |
+| ADAM        | FRIPP       | AFRIPP   |
+| PAYAM       | KAUFLING    | PKAUFLIN |
+| SHANTA      | VOLLMAN     | SVOLLMAN |
+| KEVIN       | MOURGOS     | KMOURGOS |
+| JULIA       | NAYER       | JNAYER   |
+| IRENE       | MIKKILINENI | IMIKKILI |
+| JAMES       | LANDRY      | JLANDRY  |
+| STEVEN      | MARKLE      | SMARKLE  |
++-------------+-------------+----------+
+29 rows in set (0.00 sec)
+
+mysql> SELECT DISTINCT JOB_TITLE FROM JOBS;
++---------------------------------+
+| JOB_TITLE                       |
++---------------------------------+
+| PUBLIC ACCOUNTANT               |
+| ACCOUNTING MANAGER              |
+| ADMINISTRATION ASSISTANT        |
+| PRESIDENT                       |
+| ADMINISTRATION VICE PRESIDENT   |
+| ACCOUNTANT                      |
+| FINANCE MANAGER                 |
+| HUMAN RESOURCES REPRESENTATIVE  |
+| PROGRAMMER                      |
+| MARKETING MANAGER               |
+| MARKETING REPRESENTATIVE        |
+| PUBLIC RELATIONS REPRESENTATIVE |
+| PURCHASING CLERK                |
+| PURCHASING MANAGER              |
+| SALES MANAGER                   |
+| SALES REPRESENTATIVE            |
+| SHIPPING CLERK                  |
+| STOCK CLERK                     |
+| STOCK MANAGER                   |
++---------------------------------+
+19 rows in set (0.00 sec)
+
+mysql> SELECT COUNT(*) AS TOTAL_EMPLOYEES FROM EMPLOYEES;
++-----------------+
+| TOTAL_EMPLOYEES |
++-----------------+
+|              29 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEES WHERE HIRE_DATE > '2015-01-01';
+Empty set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEES WHERE SALARY > 5000;
++-------------+-------------+-----------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME  | LAST_NAME | EMAIL    | PHONE_NUMBER | HIRE_DATE  | JOB_ID     | SALARY | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+-------------+-----------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+|         100 | STEVEN      | KING      | SKING    | 515.123.4567 | 1987-06-17 | AD_PRES    |  24000 |           NULL |       NULL |            90 |
+|         101 | NEENA       | KOCHHAR   | NKOCHHAR | 515.123.4568 | 1989-09-21 | AD_VP      |  17000 |           NULL |        100 |            90 |
+|         102 | LEX         | DE HAAN   | LDEHAAN  | 515.123.4569 | 1993-01-13 | AD_VP      |  17000 |           NULL |        100 |            90 |
+|         103 | ALEXANDER   | HUNOLD    | AHUNOLD  | 590.423.4567 | 1990-01-03 | IT_PROG    |   9000 |           NULL |        102 |            60 |
+|         104 | BRUCE       | ERNST     | BERNST   | 590.423.4568 | 1991-05-21 | IT_PROG    |   6000 |           NULL |        103 |            60 |
+|         108 | NANCY       | GREENBERG | NGREENBE | 515.124.4569 | 1994-08-17 | FI_MGR     |  12000 |           NULL |        101 |           100 |
+|         109 | DANIEL      | FAVIET    | DFAVIET  | 515.124.4169 | 1994-08-16 | FI_ACCOUNT |   9000 |           NULL |        108 |           100 |
+|         110 | JOHN        | CHEN      | JCHEN    | 515.124.4269 | 1997-09-28 | FI_ACCOUNT |   8200 |           NULL |        108 |           100 |
+|         111 | ISMAEL      | SCIARRA   | ISCIARRA | 515.124.4369 | 1997-09-30 | FI_ACCOUNT |   7700 |           NULL |        108 |           100 |
+|         112 | JOSE MANUEL | URMAN     | JMURMAN  | 515.124.4469 | 1998-03-07 | FI_ACCOUNT |   7800 |           NULL |        108 |           100 |
+|         113 | LUIS        | POPP      | LPOPP    | 515.124.4567 | 1999-12-07 | FI_ACCOUNT |   6900 |           NULL |        108 |           100 |
+|         114 | DEN         | RAPHAELY  | DRAPHEAL | 515.127.4561 | 1994-12-07 | PU_MAN     |  11000 |           NULL |        100 |            30 |
+|         120 | MATTHEW     | WEISS     | MWEISS   | 650.123.1234 | 1996-07-18 | ST_MAN     |   8000 |           NULL |        100 |            50 |
+|         121 | ADAM        | FRIPP     | AFRIPP   | 650.123.2234 | 1997-04-10 | ST_MAN     |   8200 |           NULL |        100 |            50 |
+|         122 | PAYAM       | KAUFLING  | PKAUFLIN | 650.123.3234 | 1995-05-01 | ST_MAN     |   7900 |           NULL |        100 |            50 |
+|         123 | SHANTA      | VOLLMAN   | SVOLLMAN | 650.123.4234 | 1997-10-10 | ST_MAN     |   6500 |           NULL |        100 |            50 |
+|         124 | KEVIN       | MOURGOS   | KMOURGOS | 650.123.5234 | 1999-11-16 | ST_MAN     |   5800 |           NULL |        100 |            50 |
++-------------+-------------+-----------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+17 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEES WHERE JOB_ID IN (SELECT JOB_ID FROM JOBS WHERE JOB_TITLE LIKE '%MANAGER%');
++-------------+------------+-----------+----------+--------------+------------+--------+--------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME | EMAIL    | PHONE_NUMBER | HIRE_DATE  | JOB_ID | SALARY | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+------------+-----------+----------+--------------+------------+--------+--------+----------------+------------+---------------+
+|         108 | NANCY      | GREENBERG | NGREENBE | 515.124.4569 | 1994-08-17 | FI_MGR |  12000 |           NULL |        101 |           100 |
+|         114 | DEN        | RAPHAELY  | DRAPHEAL | 515.127.4561 | 1994-12-07 | PU_MAN |  11000 |           NULL |        100 |            30 |
+|         120 | MATTHEW    | WEISS     | MWEISS   | 650.123.1234 | 1996-07-18 | ST_MAN |   8000 |           NULL |        100 |            50 |
+|         121 | ADAM       | FRIPP     | AFRIPP   | 650.123.2234 | 1997-04-10 | ST_MAN |   8200 |           NULL |        100 |            50 |
+|         122 | PAYAM      | KAUFLING  | PKAUFLIN | 650.123.3234 | 1995-05-01 | ST_MAN |   7900 |           NULL |        100 |            50 |
+|         123 | SHANTA     | VOLLMAN   | SVOLLMAN | 650.123.4234 | 1997-10-10 | ST_MAN |   6500 |           NULL |        100 |            50 |
+|         124 | KEVIN      | MOURGOS   | KMOURGOS | 650.123.5234 | 1999-11-16 | ST_MAN |   5800 |           NULL |        100 |            50 |
++-------------+------------+-----------+----------+--------------+------------+--------+--------+----------------+------------+---------------+
+7 rows in set (0.01 sec)
+
+mysql> SELECT * FROM EMPLOYEES WHERE FIRST_NAME LIKE 'A%N';
+Empty set (0.01 sec)
+
+mysql> SELECT * FROM EMPLOYEES WHERE COMMISSION_PCT IS NULL;
++-------------+-------------+-------------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME  | LAST_NAME   | EMAIL    | PHONE_NUMBER | HIRE_DATE  | JOB_ID     | SALARY | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+-------------+-------------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+|         100 | STEVEN      | KING        | SKING    | 515.123.4567 | 1987-06-17 | AD_PRES    |  24000 |           NULL |       NULL |            90 |
+|         101 | NEENA       | KOCHHAR     | NKOCHHAR | 515.123.4568 | 1989-09-21 | AD_VP      |  17000 |           NULL |        100 |            90 |
+|         102 | LEX         | DE HAAN     | LDEHAAN  | 515.123.4569 | 1993-01-13 | AD_VP      |  17000 |           NULL |        100 |            90 |
+|         103 | ALEXANDER   | HUNOLD      | AHUNOLD  | 590.423.4567 | 1990-01-03 | IT_PROG    |   9000 |           NULL |        102 |            60 |
+|         104 | BRUCE       | ERNST       | BERNST   | 590.423.4568 | 1991-05-21 | IT_PROG    |   6000 |           NULL |        103 |            60 |
+|         105 | DAVID       | AUSTIN      | DAUSTIN  | 590.423.4569 | 1997-06-25 | IT_PROG    |   4800 |           NULL |        103 |            60 |
+|         106 | VALLI       | PATABALLA   | VPATABAL | 590.423.4560 | 1998-02-05 | IT_PROG    |   4800 |           NULL |        103 |            60 |
+|         107 | DIANA       | LORENTZ     | DLORENTZ | 590.423.5567 | 1999-02-07 | IT_PROG    |   4200 |           NULL |        103 |            60 |
+|         108 | NANCY       | GREENBERG   | NGREENBE | 515.124.4569 | 1994-08-17 | FI_MGR     |  12000 |           NULL |        101 |           100 |
+|         109 | DANIEL      | FAVIET      | DFAVIET  | 515.124.4169 | 1994-08-16 | FI_ACCOUNT |   9000 |           NULL |        108 |           100 |
+|         110 | JOHN        | CHEN        | JCHEN    | 515.124.4269 | 1997-09-28 | FI_ACCOUNT |   8200 |           NULL |        108 |           100 |
+|         111 | ISMAEL      | SCIARRA     | ISCIARRA | 515.124.4369 | 1997-09-30 | FI_ACCOUNT |   7700 |           NULL |        108 |           100 |
+|         112 | JOSE MANUEL | URMAN       | JMURMAN  | 515.124.4469 | 1998-03-07 | FI_ACCOUNT |   7800 |           NULL |        108 |           100 |
+|         113 | LUIS        | POPP        | LPOPP    | 515.124.4567 | 1999-12-07 | FI_ACCOUNT |   6900 |           NULL |        108 |           100 |
+|         114 | DEN         | RAPHAELY    | DRAPHEAL | 515.127.4561 | 1994-12-07 | PU_MAN     |  11000 |           NULL |        100 |            30 |
+|         115 | ALEXANDER   | KHOO        | AKHOO    | 515.127.4562 | 1995-05-18 | PU_CLERK   |   3100 |           NULL |        114 |            30 |
+|         116 | SHELLI      | BAIDA       | SBAIDA   | 515.127.4563 | 1997-12-24 | PU_CLERK   |   2900 |           NULL |        114 |            30 |
+|         117 | SIGAL       | TOBIAS      | STOBIAS  | 515.127.4564 | 1997-07-24 | PU_CLERK   |   2800 |           NULL |        114 |            30 |
+|         118 | GUY         | HIMURO      | GHIMURO  | 515.127.4565 | 1998-11-15 | PU_CLERK   |   2600 |           NULL |        114 |            30 |
+|         119 | KAREN       | COLMENARES  | KCOLMENA | 515.127.4566 | 1999-08-10 | PU_CLERK   |   2500 |           NULL |        114 |            30 |
+|         120 | MATTHEW     | WEISS       | MWEISS   | 650.123.1234 | 1996-07-18 | ST_MAN     |   8000 |           NULL |        100 |            50 |
+|         121 | ADAM        | FRIPP       | AFRIPP   | 650.123.2234 | 1997-04-10 | ST_MAN     |   8200 |           NULL |        100 |            50 |
+|         122 | PAYAM       | KAUFLING    | PKAUFLIN | 650.123.3234 | 1995-05-01 | ST_MAN     |   7900 |           NULL |        100 |            50 |
+|         123 | SHANTA      | VOLLMAN     | SVOLLMAN | 650.123.4234 | 1997-10-10 | ST_MAN     |   6500 |           NULL |        100 |            50 |
+|         124 | KEVIN       | MOURGOS     | KMOURGOS | 650.123.5234 | 1999-11-16 | ST_MAN     |   5800 |           NULL |        100 |            50 |
+|         125 | JULIA       | NAYER       | JNAYER   | 650.124.1214 | 1997-07-16 | ST_CLERK   |   3200 |           NULL |        120 |            50 |
+|         126 | IRENE       | MIKKILINENI | IMIKKILI | 650.124.1224 | 1998-09-28 | ST_CLERK   |   2700 |           NULL |        120 |            50 |
+|         127 | JAMES       | LANDRY      | JLANDRY  | 650.124.1334 | 1999-01-14 | ST_CLERK   |   2400 |           NULL |        120 |            50 |
+|         128 | STEVEN      | MARKLE      | SMARKLE  | 650.124.1434 | 2000-03-08 | ST_CLERK   |   2200 |           NULL |        120 |            50 |
++-------------+-------------+-------------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+29 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEES ORDER BY SALARY DESC LIMIT 5;
++-------------+------------+-----------+----------+--------------+------------+---------+--------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME | EMAIL    | PHONE_NUMBER | HIRE_DATE  | JOB_ID  | SALARY | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+------------+-----------+----------+--------------+------------+---------+--------+----------------+------------+---------------+
+|         100 | STEVEN     | KING      | SKING    | 515.123.4567 | 1987-06-17 | AD_PRES |  24000 |           NULL |       NULL |            90 |
+|         101 | NEENA      | KOCHHAR   | NKOCHHAR | 515.123.4568 | 1989-09-21 | AD_VP   |  17000 |           NULL |        100 |            90 |
+|         102 | LEX        | DE HAAN   | LDEHAAN  | 515.123.4569 | 1993-01-13 | AD_VP   |  17000 |           NULL |        100 |            90 |
+|         108 | NANCY      | GREENBERG | NGREENBE | 515.124.4569 | 1994-08-17 | FI_MGR  |  12000 |           NULL |        101 |           100 |
+|         114 | DEN        | RAPHAELY  | DRAPHEAL | 515.127.4561 | 1994-12-07 | PU_MAN  |  11000 |           NULL |        100 |            30 |
++-------------+------------+-----------+----------+--------------+------------+---------+--------+----------------+------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT AVG(SALARY) AS AVERAGE_SALARY FROM EMPLOYEES;
++-------------------+
+| AVERAGE_SALARY    |
++-------------------+
+| 7248.275862068966 |
++-------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT DEPARTMENT_ID, COUNT(*) AS TOTAL_EMPLOYEES 
+    -> FROM EMPLOYEES 
+    -> GROUP BY DEPARTMENT_ID;
++---------------+-----------------+
+| DEPARTMENT_ID | TOTAL_EMPLOYEES |
++---------------+-----------------+
+|            30 |               6 |
+|            50 |               9 |
+|            60 |               5 |
+|            90 |               3 |
+|           100 |               6 |
++---------------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT FIRST_NAME, LENGTH(FIRST_NAME) AS NAME_LENGTH 
+    -> FROM EMPLOYEES;
++-------------+-------------+
+| FIRST_NAME  | NAME_LENGTH |
++-------------+-------------+
+| STEVEN      |           6 |
+| NEENA       |           5 |
+| LEX         |           3 |
+| ALEXANDER   |           9 |
+| BRUCE       |           5 |
+| DAVID       |           5 |
+| VALLI       |           5 |
+| DIANA       |           5 |
+| NANCY       |           5 |
+| DANIEL      |           6 |
+| JOHN        |           4 |
+| ISMAEL      |           6 |
+| JOSE MANUEL |          11 |
+| LUIS        |           4 |
+| DEN         |           3 |
+| ALEXANDER   |           9 |
+| SHELLI      |           6 |
+| SIGAL       |           5 |
+| GUY         |           3 |
+| KAREN       |           5 |
+| MATTHEW     |           7 |
+| ADAM        |           4 |
+| PAYAM       |           5 |
+| SHANTA      |           6 |
+| KEVIN       |           5 |
+| JULIA       |           5 |
+| IRENE       |           5 |
+| JAMES       |           5 |
+| STEVEN      |           6 |
++-------------+-------------+
+29 rows in set (0.01 sec)
+
+mysql> SELECT FIRST_NAME, LAST_NAME, YEAR(HIRE_DATE) AS HIRE_YEAR 
+    -> FROM EMPLOYEES;
++-------------+-------------+-----------+
+| FIRST_NAME  | LAST_NAME   | HIRE_YEAR |
++-------------+-------------+-----------+
+| STEVEN      | KING        |      1987 |
+| NEENA       | KOCHHAR     |      1989 |
+| LEX         | DE HAAN     |      1993 |
+| ALEXANDER   | HUNOLD      |      1990 |
+| BRUCE       | ERNST       |      1991 |
+| DAVID       | AUSTIN      |      1997 |
+| VALLI       | PATABALLA   |      1998 |
+| DIANA       | LORENTZ     |      1999 |
+| NANCY       | GREENBERG   |      1994 |
+| DANIEL      | FAVIET      |      1994 |
+| JOHN        | CHEN        |      1997 |
+| ISMAEL      | SCIARRA     |      1997 |
+| JOSE MANUEL | URMAN       |      1998 |
+| LUIS        | POPP        |      1999 |
+| DEN         | RAPHAELY    |      1994 |
+| ALEXANDER   | KHOO        |      1995 |
+| SHELLI      | BAIDA       |      1997 |
+| SIGAL       | TOBIAS      |      1997 |
+| GUY         | HIMURO      |      1998 |
+| KAREN       | COLMENARES  |      1999 |
+| MATTHEW     | WEISS       |      1996 |
+| ADAM        | FRIPP       |      1997 |
+| PAYAM       | KAUFLING    |      1995 |
+| SHANTA      | VOLLMAN     |      1997 |
+| KEVIN       | MOURGOS     |      1999 |
+| JULIA       | NAYER       |      1997 |
+| IRENE       | MIKKILINENI |      1998 |
+| JAMES       | LANDRY      |      1999 |
+| STEVEN      | MARKLE      |      2000 |
++-------------+-------------+-----------+
+29 rows in set (0.00 sec)
+
+mysql> SELECT JOB_ID, MIN(SALARY) AS MIN_SALARY, MAX(SALARY) AS MAX_SALARY 
+    -> FROM EMPLOYEES 
+    -> GROUP BY JOB_ID;
++------------+------------+------------+
+| JOB_ID     | MIN_SALARY | MAX_SALARY |
++------------+------------+------------+
+| AD_PRES    |      24000 |      24000 |
+| AD_VP      |      17000 |      17000 |
+| FI_ACCOUNT |       6900 |       9000 |
+| FI_MGR     |      12000 |      12000 |
+| IT_PROG    |       4200 |       9000 |
+| PU_CLERK   |       2500 |       3100 |
+| PU_MAN     |      11000 |      11000 |
+| ST_CLERK   |       2200 |       3200 |
+| ST_MAN     |       5800 |       8200 |
++------------+------------+------------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT E.FIRST_NAME, E.LAST_NAME, D.DEPARTMENT_NAME 
+    -> FROM EMPLOYEES E  
+    -> JOIN DEPARTMENTS D ON E.DEPARTMENT_ID = D.DEPARTMENT_ID;
++-------------+-------------+-----------------+
+| FIRST_NAME  | LAST_NAME   | DEPARTMENT_NAME |
++-------------+-------------+-----------------+
+| STEVEN      | KING        | EXECUTIVE       |
+| NEENA       | KOCHHAR     | EXECUTIVE       |
+| LEX         | DE HAAN     | EXECUTIVE       |
+| ALEXANDER   | HUNOLD      | IT              |
+| BRUCE       | ERNST       | IT              |
+| DAVID       | AUSTIN      | IT              |
+| VALLI       | PATABALLA   | IT              |
+| DIANA       | LORENTZ     | IT              |
+| NANCY       | GREENBERG   | FINANCE         |
+| DANIEL      | FAVIET      | FINANCE         |
+| JOHN        | CHEN        | FINANCE         |
+| ISMAEL      | SCIARRA     | FINANCE         |
+| JOSE MANUEL | URMAN       | FINANCE         |
+| LUIS        | POPP        | FINANCE         |
+| DEN         | RAPHAELY    | PURCHASING      |
+| ALEXANDER   | KHOO        | PURCHASING      |
+| SHELLI      | BAIDA       | PURCHASING      |
+| SIGAL       | TOBIAS      | PURCHASING      |
+| GUY         | HIMURO      | PURCHASING      |
+| KAREN       | COLMENARES  | PURCHASING      |
+| MATTHEW     | WEISS       | SHIPPING        |
+| ADAM        | FRIPP       | SHIPPING        |
+| PAYAM       | KAUFLING    | SHIPPING        |
+| SHANTA      | VOLLMAN     | SHIPPING        |
+| KEVIN       | MOURGOS     | SHIPPING        |
+| JULIA       | NAYER       | SHIPPING        |
+| IRENE       | MIKKILINENI | SHIPPING        |
+| JAMES       | LANDRY      | SHIPPING        |
+| STEVEN      | MARKLE      | SHIPPING        |
++-------------+-------------+-----------------+
+29 rows in set (0.00 sec)
+
+mysql> SELECT E.FIRST_NAME, E.LAST_NAME, J.JOB_TITLE, L.CITY, L.STATE_PROVINCE  
+    -> FROM EMPLOYEES E  
+    -> JOIN JOBS J ON E.JOB_ID = J.JOB_ID  
+    -> JOIN DEPARTMENTS D ON E.DEPARTMENT_ID = D.DEPARTMENT_ID  
+    -> JOIN LOCATIONS L ON D.LOCATION_ID = L.LOCATION_ID;
++-------------+-------------+-------------------------------+---------------------+----------------+
+| FIRST_NAME  | LAST_NAME   | JOB_TITLE                     | CITY                | STATE_PROVINCE |
++-------------+-------------+-------------------------------+---------------------+----------------+
+| STEVEN      | KING        | PRESIDENT                     | SEATTLE             | WASHINGTON     |
+| NEENA       | KOCHHAR     | ADMINISTRATION VICE PRESIDENT | SEATTLE             | WASHINGTON     |
+| LEX         | DE HAAN     | ADMINISTRATION VICE PRESIDENT | SEATTLE             | WASHINGTON     |
+| ALEXANDER   | HUNOLD      | PROGRAMMER                    | SOUTHLAKE           | TEXAS          |
+| BRUCE       | ERNST       | PROGRAMMER                    | SOUTHLAKE           | TEXAS          |
+| DAVID       | AUSTIN      | PROGRAMMER                    | SOUTHLAKE           | TEXAS          |
+| VALLI       | PATABALLA   | PROGRAMMER                    | SOUTHLAKE           | TEXAS          |
+| DIANA       | LORENTZ     | PROGRAMMER                    | SOUTHLAKE           | TEXAS          |
+| NANCY       | GREENBERG   | FINANCE MANAGER               | SEATTLE             | WASHINGTON     |
+| DANIEL      | FAVIET      | ACCOUNTANT                    | SEATTLE             | WASHINGTON     |
+| JOHN        | CHEN        | ACCOUNTANT                    | SEATTLE             | WASHINGTON     |
+| ISMAEL      | SCIARRA     | ACCOUNTANT                    | SEATTLE             | WASHINGTON     |
+| JOSE MANUEL | URMAN       | ACCOUNTANT                    | SEATTLE             | WASHINGTON     |
+| LUIS        | POPP        | ACCOUNTANT                    | SEATTLE             | WASHINGTON     |
+| DEN         | RAPHAELY    | PURCHASING MANAGER            | SEATTLE             | WASHINGTON     |
+| ALEXANDER   | KHOO        | PURCHASING CLERK              | SEATTLE             | WASHINGTON     |
+| SHELLI      | BAIDA       | PURCHASING CLERK              | SEATTLE             | WASHINGTON     |
+| SIGAL       | TOBIAS      | PURCHASING CLERK              | SEATTLE             | WASHINGTON     |
+| GUY         | HIMURO      | PURCHASING CLERK              | SEATTLE             | WASHINGTON     |
+| KAREN       | COLMENARES  | PURCHASING CLERK              | SEATTLE             | WASHINGTON     |
+| MATTHEW     | WEISS       | STOCK MANAGER                 | SOUTH SAN FRANCISCO | CALIFORNIA     |
+| ADAM        | FRIPP       | STOCK MANAGER                 | SOUTH SAN FRANCISCO | CALIFORNIA     |
+| PAYAM       | KAUFLING    | STOCK MANAGER                 | SOUTH SAN FRANCISCO | CALIFORNIA     |
+| SHANTA      | VOLLMAN     | STOCK MANAGER                 | SOUTH SAN FRANCISCO | CALIFORNIA     |
+| KEVIN       | MOURGOS     | STOCK MANAGER                 | SOUTH SAN FRANCISCO | CALIFORNIA     |
+| JULIA       | NAYER       | STOCK CLERK                   | SOUTH SAN FRANCISCO | CALIFORNIA     |
+| IRENE       | MIKKILINENI | STOCK CLERK                   | SOUTH SAN FRANCISCO | CALIFORNIA     |
+| JAMES       | LANDRY      | STOCK CLERK                   | SOUTH SAN FRANCISCO | CALIFORNIA     |
+| STEVEN      | MARKLE      | STOCK CLERK                   | SOUTH SAN FRANCISCO | CALIFORNIA     |
++-------------+-------------+-------------------------------+---------------------+----------------+
+29 rows in set (0.00 sec)
+
+mysql> SELECT D.DEPARTMENT_NAME, COUNT(E.EMPLOYEE_ID) AS TOTAL_EMPLOYEES  
+    -> FROM DEPARTMENTS D  
+    -> LEFT JOIN EMPLOYEES E ON D.DEPARTMENT_ID = E.DEPARTMENT_ID  
+    -> GROUP BY D.DEPARTMENT_NAME;
++----------------------+-----------------+
+| DEPARTMENT_NAME      | TOTAL_EMPLOYEES |
++----------------------+-----------------+
+| ADMINISTRATION       |               0 |
+| MARKETING            |               0 |
+| PURCHASING           |               6 |
+| HUMAN RESOURCES      |               0 |
+| SHIPPING             |               9 |
+| IT                   |               5 |
+| PUBLIC RELATIONS     |               0 |
+| SALES                |               0 |
+| EXECUTIVE            |               3 |
+| FINANCE              |               6 |
+| ACCOUNTING           |               0 |
+| TREASURY             |               0 |
+| CORPORATE TAX        |               0 |
+| CONTROL AND CREDIT   |               0 |
+| SHAREHOLDER SERVICES |               0 |
+| BENEFITS             |               0 |
+| MANUFACTURING        |               0 |
+| CONSTRUCTION         |               0 |
+| CONTRACTING          |               0 |
+| OPERATIONS           |               0 |
+| IT SUPPORT           |               0 |
+| NOC                  |               0 |
+| IT HELPDESK          |               0 |
+| GOVERNMENT SALES     |               0 |
+| RETAIL SALES         |               0 |
+| RECRUITING           |               0 |
+| PAYROLL              |               0 |
++----------------------+-----------------+
+27 rows in set (0.00 sec)
+
+mysql> SELECT E.FIRST_NAME, E.LAST_NAME, E.JOB_ID  
+    -> FROM EMPLOYEES E  
+    -> JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID  
+    -> WHERE E.JOB_ID = M.JOB_ID;
++------------+-----------+---------+
+| FIRST_NAME | LAST_NAME | JOB_ID  |
++------------+-----------+---------+
+| BRUCE      | ERNST     | IT_PROG |
+| DAVID      | AUSTIN    | IT_PROG |
+| VALLI      | PATABALLA | IT_PROG |
+| DIANA      | LORENTZ   | IT_PROG |
++------------+-----------+---------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT DISTINCT E.FIRST_NAME, E.LAST_NAME  
+    -> FROM EMPLOYEES E  
+    -> JOIN JOB_HISTORY JH ON E.EMPLOYEE_ID = JH.EMPLOYEE_ID;
++------------+-----------+
+| FIRST_NAME | LAST_NAME |
++------------+-----------+
+| NEENA      | KOCHHAR   |
+| LEX        | DE HAAN   |
+| DEN        | RAPHAELY  |
+| PAYAM      | KAUFLING  |
++------------+-----------+
+4 rows in set (0.01 sec)
+
+mysql> 
